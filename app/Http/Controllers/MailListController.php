@@ -35,7 +35,7 @@ class MailListController extends Controller
    * @param Request $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function create(Request $request)
+  public function store(Request $request)
   {
     $mailList = MailList::create($request->all());
 
@@ -66,7 +66,7 @@ class MailListController extends Controller
    * @return \Illuminate\Http\JsonResponse
    * @throws \Exception
    */
-  public function delete(MailList $mailList)
+  public function destroy(MailList $mailList)
   {
     // TODO: cascade delete
     $mailList->delete();
