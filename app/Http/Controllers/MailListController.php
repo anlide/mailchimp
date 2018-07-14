@@ -52,7 +52,9 @@ class MailListController extends Controller
    */
   public function update(Request $request, MailList $mailList)
   {
-    // TODO: disallow to update "id"
+    if ($request->input('id') !== null) {
+      throw new \InvalidArgumentException("parameter 'id' is not acceptable");
+    }
     $mailList->update($request->all());
 
     return response()->json($mailList, 200);

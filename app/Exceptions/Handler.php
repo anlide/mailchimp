@@ -50,11 +50,20 @@ class Handler extends ExceptionHandler
     {
         // This will replace our 404 response with
         // a JSON response.
-        if ($exception instanceof ModelNotFoundException &&
-          ($request->wantsJson() || $request->acceptsJson()))
-        {
+        if ($request->wantsJson() || $request->acceptsJson()) {
+            switch (true) {
+                case ($exception instanceof ModelNotFoundException):
+                    $error = 'Resource not found';
+                    break;
+                case ($exception instanceof \InvalidArgumentException):
+                    $error = 'Invalid argument [' . $exception->getMessage() . ']';
+                    break;
+                default:
+                    $error = 'Unknown error';
+                    break;
+            }
             return response()->json([
-              'data' => 'Resource not found'
+              'error' => $error
             ], 404);
         }
 
