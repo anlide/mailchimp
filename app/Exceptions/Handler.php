@@ -59,12 +59,14 @@ class Handler extends ExceptionHandler
                     $error = 'Invalid argument [' . $exception->getMessage() . ']';
                     break;
                 default:
-                    $error = 'Unknown error';
+                    $error = null;
                     break;
             }
-            return response()->json([
-              'error' => $error
-            ], 404);
+            if ($error !== null) {
+                return response()->json([
+                  'error' => $error
+                ], 404);
+            }
         }
 
         return parent::render($request, $exception);

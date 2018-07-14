@@ -70,7 +70,6 @@ class MailListController extends Controller
    */
   public function destroy(MailList $mailList)
   {
-    // TODO: cascade delete
     $mailList->delete();
 
     return response()->json(null, 204);
