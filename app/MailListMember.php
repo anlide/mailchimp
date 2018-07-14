@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string created_at
  * @property string updated_at
  * @property string email
+ * @property string first_name
+ * @property string last_name
  * @package App
  */
 class MailListMember extends Model
@@ -21,7 +23,7 @@ class MailListMember extends Model
    * @var array
    */
   protected $fillable = [
-    'email', 'mail_list_id',
+    'email', 'mail_list_id', 'first_name', 'last_name'
   ];
 
   /**

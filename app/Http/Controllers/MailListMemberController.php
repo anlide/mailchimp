@@ -48,17 +48,34 @@ class MailListMemberController extends Controller
    */
   public function store(Request $request, MailList $mailList)
   {
+    if ($request->input('id') !== null) {
+      throw new \InvalidArgumentException("parameter 'id' is not acceptable");
+      // TODO: unit test for it
+    }
+    if ($request->input('mail_list_id') !== null) {
+      throw new \InvalidArgumentException("parameter 'mail_list_id' is not acceptable");
+      // TODO: unit test for it
+    }
     if ($request->input('email') === null) {
       throw new \InvalidArgumentException("missed parameter 'email'");
       // TODO: unit test for it
     }
     if (!filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
-      throw new \InvalidArgumentException("too short parameter 'email'");
+      throw new \InvalidArgumentException("wrong parameter 'email'");
       // TODO: unit test for it
     }
     // TODO: check "is this email there already exists?" in this mailList.
     try {
-      // TODO: Add member to maillist at Mailchimp side.
+      // Add member to maillist at Mailchimp side.
+      $mc = new Mailchimp(env('MAILCHIMP_API_KEY'));
+      $result = $mc->post('lists/' . $mailList->list_id . '/members', [
+        'email_address' => $request->input('email'),
+        'status' => 'subscribed',
+        'merge_fields' => [
+          'FNAME' => $request->input('first_name'),
+          'LNAME' => $request->input('last_name'),
+        ],
+      ]);
 
       // If no any exception here - do local sync.
       $data = $request->all();
@@ -88,17 +105,31 @@ class MailListMemberController extends Controller
       throw new \InvalidArgumentException("parameter 'id' is not acceptable");
       // TODO: unit test for it
     }
+    if ($request->input('mail_list_id') !== null) {
+      throw new \InvalidArgumentException("parameter 'mail_list_id' is not acceptable");
+      // TODO: unit test for it
+    }
     if ($request->input('email') !== null) {
       throw new \InvalidArgumentException("parameter 'email' is not acceptable");
       // TODO: unit test for it
     }
-    if ($request->input('name') === null) {
-      // TODO: implement it
-      //throw new \InvalidArgumentException("missed parameter 'name'");
+    if ($request->input('first_name') === null) {
+      throw new \InvalidArgumentException("missed parameter 'first_name'");
+      // TODO: unit test for it
+    }
+    if ($request->input('last_name') === null) {
+      throw new \InvalidArgumentException("missed parameter 'last_name'");
       // TODO: unit test for it
     }
     try {
-      // TODO: Update member at Mailchimp side.
+      // Update member at Mailchimp side.
+      $mc = new Mailchimp(env('MAILCHIMP_API_KEY'));
+      $result = $mc->patch('lists/' . $mailList->list_id . '/members/' . md5($email), [
+        'merge_fields' => [
+          'FNAME' => $request->input('first_name'),
+          'LNAME' => $request->input('last_name'),
+        ],
+      ]);
 
       // If no any exception here - do local sync.
       $mailListMember = MailListMember::where('email', $email)->where('mail_list_id', $mailList->id)->first();
@@ -123,7 +154,9 @@ class MailListMemberController extends Controller
   public function destroy(MailList $mailList, $email)
   {
     try {
-      // TODO: Unsubscribe member at Mailchimp side.
+      // Unsubscribe member at Mailchimp side.
+      $mc = new Mailchimp(env('MAILCHIMP_API_KEY'));
+      $result = $mc->delete('lists/' . $mailList->list_id . '/members/' . md5($email));
 
       // If no any exception here - do local sync.
       $mailListMember = MailListMember::where('email', $email)->where('mail_list_id', $mailList->id)->first();

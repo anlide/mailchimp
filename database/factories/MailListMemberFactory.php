@@ -18,5 +18,7 @@ $factory->define(App\MailListMember::class, function (Faker $faker) {
   return [
     'mail_list_id' => $mailLists->random()->id,
     'email' => $faker->email,
+    'first_name' => $faker->firstName,
+    'last_name' => $faker->lastName,
   ];
 });

@@ -66,7 +66,14 @@ class SyncMailchimp extends Command
             // Store each member, with relation to maillist.
             foreach ($resultMembers['members'] as $member) {
                 $email = $member->email_address;
-                MailListMember::create(['email' => $email, 'mail_list_id' => $mailList->id]);
+                $first_name = $member->merge_fields->FNAME;
+                $last_name = $member->merge_fields->LNAME;
+                MailListMember::create([
+                  'email' => $email,
+                  'first_name' => $first_name,
+                  'last_name' => $last_name,
+                  'mail_list_id' => $mailList->id
+                ]);
             }
         }
     }
