@@ -6,6 +6,7 @@ use App\MailList;
 use App\MailListMember;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Mailchimp\Mailchimp;
 
 class SyncMailchimp extends Command
 {
@@ -46,24 +47,26 @@ class SyncMailchimp extends Command
         MailListMember::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $mailchimp = app('Mailchimp');
+        $mc = new Mailchimp(env('MAILCHIMP_API_KEY'));
 
         // Receive list of maillists.
-        $lists = $mailchimp->lists->getList();
+        // TODO: implement pagination if needs
+        $result = $mc->get('lists');
 
         // Store each maillist.
-        foreach ($lists['data'] as $list) {
-            $name = $list['name'];
-            $listId = $list['id'];
+        foreach ($result['lists'] as $list) {
+            $name = $list->name;
+            $listId = $list->id;
             $mailList = MailList::create(['name' => $name]);
 
             // Receive list of members.
-            $members = $mailchimp->lists->members($listId);
+            // TODO: implement pagination if needs
+            $resultMembers = $mc->get('lists/' . $listId . '/members');
 
             // Store each member, with relation to maillist.
-            foreach ($members['data'] as $member) {
-                $email = $member['email'];
-                $mailList = MailListMember::create(['email' => $email, 'mail_list_id' => $mailList->id]);
+            foreach ($resultMembers['members'] as $member) {
+                $email = $member->email_address;
+                MailListMember::create(['email' => $email, 'mail_list_id' => $mailList->id]);
             }
         }
     }
