@@ -136,9 +136,18 @@ class MailListController extends Controller
    */
   public function destroy(MailList $mailList)
   {
-    // TODO: delete at mailchimp here.
-    $mailList->delete();
+    try {
+      // Delete at Mailchimp side.
+      $mc = new Mailchimp(env('MAILCHIMP_API_KEY'));
+      $result = $mc->delete('lists/' . $mailList->list_id);
 
-    return response()->json(null, 204);
+      // If no any exception here - do local sync.
+      $mailList->delete();
+
+      return response()->json(null, 204);
+    } catch (\Exception $e) {
+      // TODO: implement handler
+      throw $e;
+    }
   }
 }
