@@ -1,8 +1,11 @@
 ## About
 
 This is test app for Softex company.
+
 About integration with mailchimp.
+
 RESTful API laravel implementation.
+
 Mail lists & members of those lists.
 
 ## How to deploy
@@ -41,4 +44,5 @@ Mail lists & members of those lists.
 ## TODO
 
 There are a lot of TODO in the code.
+
 Someone should do that before it will be used at some production.
