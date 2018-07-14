@@ -16,6 +16,15 @@ use Illuminate\Database\Eloquent\Model;
 class MailListMember extends Model
 {
   /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
+  protected $fillable = [
+    'email', 'mail_list_id',
+  ];
+
+  /**
    * The attributes that should be hidden for arrays.
    *
    * @var array

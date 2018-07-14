@@ -37,6 +37,7 @@ class MailListController extends Controller
    */
   public function store(Request $request)
   {
+    // TODO: add at mailchimp here.
     $mailList = MailList::create($request->all());
 
     return response()->json($mailList, 201);
@@ -55,6 +56,7 @@ class MailListController extends Controller
     if ($request->input('id') !== null) {
       throw new \InvalidArgumentException("parameter 'id' is not acceptable");
     }
+    // TODO: update at mailchimp here.
     $mailList->update($request->all());
 
     return response()->json($mailList, 200);
@@ -70,6 +72,7 @@ class MailListController extends Controller
    */
   public function destroy(MailList $mailList)
   {
+    // TODO: delete at mailchimp here.
     $mailList->delete();
 
     return response()->json(null, 204);
