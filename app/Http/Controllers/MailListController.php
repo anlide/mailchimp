@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\MailchimpException;
 use App\MailList;
 use Illuminate\Http\Request;
 use Mailchimp\Mailchimp;
@@ -77,7 +78,10 @@ class MailListController extends Controller
 
       return response()->json($mailList, 201);
     } catch (\Exception $e) {
-      // TODO: implement handler
+      $json = json_decode($e->getMessage(), true);
+      if (($json !== null) && (isset($json['detail']))) {
+        throw new MailchimpException($json['detail']);
+      }
       throw $e;
     }
   }
@@ -121,7 +125,10 @@ class MailListController extends Controller
 
       return response()->json($mailList, 200);
     } catch (\Exception $e) {
-      // TODO: implement handler
+      $json = json_decode($e->getMessage(), true);
+      if (($json !== null) && (isset($json['detail']))) {
+        throw new MailchimpException($json['detail']);
+      }
       throw $e;
     }
   }
@@ -146,7 +153,10 @@ class MailListController extends Controller
 
       return response()->json(null, 204);
     } catch (\Exception $e) {
-      // TODO: implement handler
+      $json = json_decode($e->getMessage(), true);
+      if (($json !== null) && (isset($json['detail']))) {
+        throw new MailchimpException($json['detail']);
+      }
       throw $e;
     }
   }

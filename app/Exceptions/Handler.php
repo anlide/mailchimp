@@ -58,6 +58,9 @@ class Handler extends ExceptionHandler
                 case ($exception instanceof \InvalidArgumentException):
                     $error = 'Invalid argument [' . $exception->getMessage() . ']';
                     break;
+                case ($exception instanceof MailchimpException):
+                    $error = 'Mailchimp: ' . $exception->getMessage();
+                    break;
                 default:
                     $error = null;
                     break;

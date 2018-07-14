@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\MailchimpException;
 use App\MailList;
 use App\MailListMember;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -84,7 +85,10 @@ class MailListMemberController extends Controller
 
       return response()->json($mailListMember, 201);
     } catch (\Exception $e) {
-      // TODO: implement handler
+      $json = json_decode($e->getMessage(), true);
+      if (($json !== null) && (isset($json['detail']))) {
+        throw new MailchimpException($json['detail']);
+      }
       throw $e;
     }
   }
@@ -137,7 +141,10 @@ class MailListMemberController extends Controller
 
       return response()->json($mailListMember, 200);
     } catch (\Exception $e) {
-      // TODO: implement handler
+      $json = json_decode($e->getMessage(), true);
+      if (($json !== null) && (isset($json['detail']))) {
+        throw new MailchimpException($json['detail']);
+      }
       throw $e;
     }
   }
@@ -153,6 +160,7 @@ class MailListMemberController extends Controller
    */
   public function destroy(MailList $mailList, $email)
   {
+    // TODO: check exists member in the mailList.
     try {
       // Unsubscribe member at Mailchimp side.
       $mc = new Mailchimp(env('MAILCHIMP_API_KEY'));
@@ -164,7 +172,10 @@ class MailListMemberController extends Controller
 
       return response()->json(null, 204);
     } catch (\Exception $e) {
-      // TODO: implement handler
+      $json = json_decode($e->getMessage(), true);
+      if (($json !== null) && (isset($json['detail']))) {
+        throw new MailchimpException($json['detail']);
+      }
       throw $e;
     }
   }
