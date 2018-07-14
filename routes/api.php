@@ -19,4 +19,5 @@ Route::post('logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => 'auth:api'], function() {
   Route::resource('mail_lists', 'MailListController');
+  Route::resource('mail_lists/{mailList}/members', 'MailListMemberController');
 });

@@ -16,6 +16,6 @@ use Faker\Generator as Faker;
 $factory->define(App\MailList::class, function (Faker $faker) {
   return [
     'name' => $faker->sentence,
-    'list_id' => $faker->asciify('********************'),
+    'list_id' => null,
   ];
 });
