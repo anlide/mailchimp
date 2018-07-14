@@ -48,6 +48,7 @@ class MailListController extends Controller
       // TODO: unit test for it
     }
     try {
+      // Create at Mailchimp side.
       $mc = new Mailchimp(env('MAILCHIMP_API_KEY'));
       $result = $mc->post('lists', [
         'name' => $request->input('name'),
@@ -70,6 +71,8 @@ class MailListController extends Controller
           'language' => 'US'
         ]
       ]);
+
+      // If no any exception here - do local sync.
       $mailList = MailList::create($request->all());
 
       return response()->json($mailList, 201);
@@ -85,6 +88,7 @@ class MailListController extends Controller
    *
    * @param Request $request
    * @param MailList $mailList
+   * @throws \Exception
    * @return \Illuminate\Http\JsonResponse
    */
   public function update(Request $request, MailList $mailList)
@@ -93,10 +97,33 @@ class MailListController extends Controller
       throw new \InvalidArgumentException("parameter 'id' is not acceptable");
       // TODO: unit test for it
     }
-    // TODO: update at mailchimp here.
-    $mailList->update($request->all());
+    if ($request->input('list_id') !== null) {
+      throw new \InvalidArgumentException("parameter 'list_id' is not acceptable");
+      // TODO: unit test for it
+    }
+    if ($request->input('name') === null) {
+      throw new \InvalidArgumentException("missed parameter 'name'");
+      // TODO: unit test for it
+    }
+    if (strlen($request->input('name')) < 3) {
+      throw new \InvalidArgumentException("too short parameter 'name'");
+      // TODO: unit test for it
+    }
+    try {
+      // Update at Mailchimp side.
+      $mc = new Mailchimp(env('MAILCHIMP_API_KEY'));
+      $result = $mc->patch('lists/' . $mailList->list_id, [
+        'name' => $request->input('name'),
+      ]);
 
-    return response()->json($mailList, 200);
+      // If no any exception here - do local sync.
+      $mailList->update($request->all());
+
+      return response()->json($mailList, 200);
+    } catch (\Exception $e) {
+      // TODO: implement handler
+      throw $e;
+    }
   }
 
   /**

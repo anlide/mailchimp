@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class MailList
- * // TODO: add property "listId" related to list-id at mailchimp system.
  *
  * @property string id
  * @property string created_at
  * @property string updated_at
  * @property string name
+ * @property string list_id
  * @package App
  */
 class MailList extends Model
@@ -22,7 +22,7 @@ class MailList extends Model
    * @var array
    */
   protected $fillable = [
-    'name',
+    'name', 'list_id'
   ];
 
   /**

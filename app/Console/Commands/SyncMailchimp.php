@@ -57,7 +57,7 @@ class SyncMailchimp extends Command
         foreach ($result['lists'] as $list) {
             $name = $list->name;
             $listId = $list->id;
-            $mailList = MailList::create(['name' => $name]);
+            $mailList = MailList::create(['name' => $name, 'list_id' => $listId]);
 
             // Receive list of members.
             // TODO: implement pagination if needs
