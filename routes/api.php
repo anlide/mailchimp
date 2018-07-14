@@ -13,8 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('mail_lists', 'MailListController@index');
-Route::get('mail_lists/{mailList}', 'MailListController@show');
-Route::post('mail_lists', 'MailListController@create');
-Route::put('mail_lists/{mailList}', 'MailListController@update');
-Route::delete('mail_lists/{mailList}', 'MailListController@delete');
+Route::post('register', 'Auth\RegisterController@register');
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout');
+
+Route::group(['middleware' => 'auth:api'], function() {
+  Route::get('mail_lists', 'MailListController@index');
+  Route::get('mail_lists/{mailList}', 'MailListController@show');
+  Route::post('mail_lists', 'MailListController@create');
+  Route::put('mail_lists/{mailList}', 'MailListController@update');
+  Route::delete('mail_lists/{mailList}', 'MailListController@delete');
+});

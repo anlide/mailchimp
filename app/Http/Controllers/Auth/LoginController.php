@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -21,13 +24,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -35,5 +31,37 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        if ($this->attemptLogin($request)) {
+            /** @var User $user */
+            $user = $this->guard()->user();
+            $user->generateToken();
+
+            return response()->json([
+              'data' => $user->toArray(),
+            ]);
+        }
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = Auth::guard('api')->user();
+
+        if ($user) {
+            /** @var User $user */
+            $user->api_token = null;
+            $user->save();
+
+            return response()->json(['data' => 'User logged out.'], 200);
+        }
+
+        return response()->json(['data' => 'User was not logged in.'], 200);
     }
 }
