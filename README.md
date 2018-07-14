@@ -17,18 +17,18 @@ Mail lists & members of those lists.
 ## List of API
 
 # Mail list:
--- GET http://127.0.0.1:8000/mail_lists -- Get list of mail list
--- GET http://127.0.0.1:8000/mail_lists/{id} -- Get one mail list
--- POST http://127.0.0.1:8000/mail_lists -- Create mail list
--- PUT http://127.0.0.1:8000/mail_lists/{id} -- Update mail list (name)
--- DELETE http://127.0.0.1:8000/mail_lists/{id} -- Delete mail list
+- GET http://127.0.0.1:8000/mail_lists -- Get list of mail list
+- GET http://127.0.0.1:8000/mail_lists/{id} -- Get one mail list
+- POST http://127.0.0.1:8000/mail_lists -- Create mail list
+- PUT http://127.0.0.1:8000/mail_lists/{id} -- Update mail list (name)
+- DELETE http://127.0.0.1:8000/mail_lists/{id} -- Delete mail list
 
 # Members of mail list:
--- GET http://127.0.0.1:8000/mail_lists{id}/members -- Get list of members in the mail list
--- GET http://127.0.0.1:8000/mail_lists{id}/members/{email} -- Get one member in the mail list
--- POST http://127.0.0.1:8000/mail_lists{id}/members -- Create member in the mail list
--- PUT http://127.0.0.1:8000/mail_lists/{id}/members/{email} -- Update member in the mail list (first_name, last_name)
--- DELETE http://127.0.0.1:8000/mail_lists/{id}/members/{email} -- Delete member from the mail list
+- GET http://127.0.0.1:8000/mail_lists{id}/members -- Get list of members in the mail list
+- GET http://127.0.0.1:8000/mail_lists{id}/members/{email} -- Get one member in the mail list
+- POST http://127.0.0.1:8000/mail_lists{id}/members -- Create member in the mail list
+- PUT http://127.0.0.1:8000/mail_lists/{id}/members/{email} -- Update member in the mail list (first_name, last_name)
+- DELETE http://127.0.0.1:8000/mail_lists/{id}/members/{email} -- Delete member from the mail list
 
 ## Additional features were implemented
 
