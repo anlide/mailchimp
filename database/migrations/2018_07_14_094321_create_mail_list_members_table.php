@@ -16,7 +16,7 @@ class CreateMailListMembersTable extends Migration
         Schema::create('mail_list_members', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('mail_list_id');
+            $table->integer('mail_list_id');
             $table->string('email');
         });
     }
