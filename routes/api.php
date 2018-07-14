@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('mail_lists', 'MailListController@index');
+Route::get('mail_lists/{mailList}', 'MailListController@show');
+Route::post('mail_lists', 'MailListController@create');
+Route::put('mail_lists/{mailList}', 'MailListController@update');
+Route::delete('mail_lists/{mailList}', 'MailListController@delete');
